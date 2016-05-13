@@ -1,0 +1,156 @@
+{%load staticfiles%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Lost.Kg</title>
+	<!-- core CSS -->
+    <link href="{% static 'css/bootstrap.min.css'%}" rel="stylesheet">
+    <link href="{% static 'css/bootstrap.css'%}'%}" rel="stylesheet">
+    <link href="{% static 'css/font-awesome.min.css'%}" rel="stylesheet">
+    <link href="{% static 'css/animate.min.css'%}" rel="stylesheet">
+    <link href="{% static 'css/owl.carousel.css'%}" rel="stylesheet">
+    <link href="{% static 'css/owl.transitions.css'%}" rel="stylesheet">
+    <link href="{% static 'css/prettyPhoto.css'%}" rel="stylesheet">
+    <link href="{% static 'css/main.css'%}" rel="stylesheet">
+    <link href="{% static 'css/responsive.css'%}" rel="stylesheet">
+
+
+
+   
+    <!--[if lt IE 9]>
+    <script src="js/html5shiv.js"></script>
+    <script src="js/respond.min.js"></script>
+    <![endif]-->       
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="images/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="images/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="images/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="images/ico/apple-touch-icon-57-precomposed.png">
+
+
+</head><!--/head-->
+<body id="home" class="homepage">
+
+
+    <header id="top-header" class="navbar-inverse navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <!-- responsive nav button -->
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <!-- /responsive nav button -->
+                    
+                    <!-- logo -->
+                    <div class="navbar-brand">
+                        <a href="{% url 'main:main' %}" >
+                            <h4 style="color:white; font-size:24px;"><span style="color:red"></span>Lost.Kg</h4>
+                        </a>
+                    </div>
+                    <!-- /logo -->
+                </div>
+
+                <!-- main nav -->
+                <nav class="collapse navbar-collapse navbar-right" role="navigation">
+                    <div class="main-menu-fake">
+                        <ul id="nav" class="nav navbar-nav">
+                            <li class="scroll"><a href="#portfolio" data-section="#portfolio">Как это работает</a></li>
+                            <li class="scroll"><a href="#contact-area" data-section="#contact-area">Обратная связь</a></li>   
+                            {% if user.is_authenticated %}
+                            <li class="scroll"><a href="{% url 'main:profile'%}">{{user.username}}</a></li>
+                            <li><a href="{% url 'main:signout' %}">Выйти</a> </li>
+                            {% else %}
+                            <li><a href="{% url 'main:signin' %}">Войти</a></li>
+                            <li class="scroll"><a href="{% url 'main:signup' %}">Зарегистрироваться</a></li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </nav>
+                <!-- /main nav -->
+            </div>
+        </header>
+
+    <section id="contact-area">
+            {% if message %}
+                <div class="alert alert-success" role="alert">{{message}}<br></div>
+            {% endif %}
+        <div class="container">
+            <div class="row">
+                <div class="section-header">
+                    <h2 class="section-title text-center wow fadeInDown animated" style="visibility: visible;">Объявление o 
+                    {% if item.is_lost %}
+                    пропаже
+                    {% else %}
+                    находке
+                    {% endif %}
+                    </h2>
+                </div>
+                <form name="contact-form" method="post" action="{% url 'main:message'%}">
+                    <div class="col-lg-6 col-lg-offset-3 animated animate-from-left" style="opacity: 1; left: 0px;">
+
+                        <div class="form-group">
+                            <label for="name">Тема</label>
+                            <input id="name" type="text" name="name" value="{{item.title}}" readonly class="form-control" placeholder="Имя Фамилия" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Дополнительная информация</label>
+                            <input type="email" id="email" name="email" value="{{item.description}}" readonly class="form-control" placeholder="Email" required>
+                        </div>
+                        {% if item.is_lost %}
+                        <div class="form-group">
+                            <label for="email"> Вознаграждение </label>
+                            <input type="email" id="email" name="email" value="{{item.award}}" readonly class="form-control" placeholder="Email" required>
+                        </div>
+                        {% endif %}
+                        <div class="form-group">
+                            <label for="email">Контактные данные</label>
+                            <input type="email" id="email" name="email" value="{{item.contacts}}" readonly class="form-control" placeholder="Email" required>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="text-center">
+                    {% if user.username == item.user.username%}
+                          <a class="btn btn-primary btn-lg btn-send-msg" href="{% url 'main:delete_item' item.id %}">Удалить</a>
+                    {% endif %}
+
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </section><!--/#bottom-->
+
+    <footer id="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <p class="text-center">
+                        &copy; 2016 Lost.kg </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer><!--/#footer-->
+
+    <script src="{% static 'js/jquery.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/owl.carousel.min.js' %}"></script>
+    <script src="{% static 'js/mousescroll.js' %}"></script>
+    <script src="{% static 'js/jquery.prettyPhoto.js' %}"></script>
+    <script src="{% static 'js/jquery.isotope.min.js' %}"></script>
+    <script src="{% static 'js/jquery.inview.min.js' %}"></script>
+    <script src="{% static 'js/wow.min.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+    <script type="text/javascript">
+        function autoFill(){
+            document.getElementById('card_id').value = document.getElementById('id-code-input1').value;
+        };
+    </script>
+</body>
+</html>
